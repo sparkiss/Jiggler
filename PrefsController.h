@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ScheduleEntry.h"
 
 
 @interface PrefsController : NSObject
@@ -72,6 +73,18 @@
     BOOL notWithFrontAppsNamedX;
 	NSString *frontAppNameComponent;
 	NSArray *frontAppNameComponents;
+
+	// Schedule
+	BOOL scheduleEnabled;
+	NSMutableArray *scheduleEntries;
+
+	IBOutlet NSButton *scheduleEnabledCheckbox;
+	IBOutlet NSTableView *scheduleTableView;
+	IBOutlet NSButton *addScheduleEntryButton;
+	IBOutlet NSButton *removeScheduleEntryButton;
+	IBOutlet NSPopUpButton *scheduleDayPopUp;
+	IBOutlet NSPopUpButton *scheduleStartTimePopUp;
+	IBOutlet NSPopUpButton *scheduleEndTimePopUp;
 }
 
 + (PrefsController *)sharedPrefsController;
@@ -128,6 +141,17 @@
 - (IBAction)notOnBatteryChanged:(id)sender;
 
 - (IBAction)onlyWithFrontAppsNamedXChanged:(id)sender;
+
+// Schedule
+- (BOOL)scheduleEnabled;
+- (NSArray *)scheduleEntries;
+- (BOOL)isCurrentTimeInSchedule;
+- (NSInteger)currentScheduleEntryIndex;
+
+- (IBAction)scheduleEnabledChanged:(id)sender;
+- (IBAction)addScheduleEntry:(id)sender;
+- (IBAction)removeScheduleEntry:(id)sender;
+- (IBAction)scheduleTimePopUpChanged:(id)sender;
 
 // Launch on Login
 - (BOOL)launchOnLogin;

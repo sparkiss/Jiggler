@@ -9,6 +9,7 @@
 #import "PrefsController.h"
 #import "CocoaExtra.h"
 #import "AppDelegate.h"
+#import "ScheduleEntry.h"
 
 
 // User defaults keys
@@ -32,6 +33,8 @@ static NSString *NotWhenScreenLockedDefaultsKey = @"NotWhenScreenLocked";
 static NSString *NotOnBatteryDefaultsKey = @"NotOnBattery";
 static NSString *NotWithFrontAppsNamedXDefaultsKey = @"NotWithFrontAppsNamedX";
 static NSString *FrontAppNameComponentDefaultsKey = @"FrontAppNameComponent";
+static NSString *ScheduleEnabledDefaultsKey = @"ScheduleEnabled";
+static NSString *ScheduleEntriesDefaultsKey = @"ScheduleEntries";
 
 
 @implementation PrefsController
@@ -82,7 +85,9 @@ static PrefsController *sharedPrefsController = nil;
                                             
                                             @"NO", NotWithFrontAppsNamedXDefaultsKey,
                                             @"", FrontAppNameComponentDefaultsKey,
-											
+
+											@"NO", ScheduleEnabledDefaultsKey,
+
 											[NSNumber numberWithBool:YES], @"NSAppSleepDisabled",	// completely disable App Nap; we want to always be live, that's kind of the point
                                             
                                             nil]];
@@ -144,8 +149,24 @@ static PrefsController *sharedPrefsController = nil;
 			frontAppNameComponent = [[userDefaults stringForKey:FrontAppNameComponentDefaultsKey] retain];
 			[frontAppNameComponents release];
 			frontAppNameComponents = nil;
+
+			// Schedule
+			scheduleEnabled = [userDefaults boolForKey:ScheduleEnabledDefaultsKey];
+			scheduleEntries = [[NSMutableArray alloc] init];
+			NSArray *savedEntries = [userDefaults arrayForKey:ScheduleEntriesDefaultsKey];
+			if (savedEntries)
+			{
+				int i, c;
+				for (i = 0, c = (int)[savedEntries count]; i < c; ++i)
+				{
+					NSDictionary *dict = [savedEntries objectAtIndex:i];
+					ScheduleEntry *entry = [ScheduleEntry entryWithDictionary:dict];
+					[scheduleEntries addObject:entry];
+				}
+				[scheduleEntries sortUsingSelector:@selector(compare:)];
+			}
 		}
-		
+
 		sharedPrefsController = [self retain];
 	}
 	else
@@ -228,7 +249,52 @@ static PrefsController *sharedPrefsController = nil;
 		[notWithFrontAppsNamedXCheckbox setState:(notWithFrontAppsNamedX && [frontAppNameComponent length])];
 		[frontAppsNameComponentTextfield setStringValue:frontAppNameComponent];
         [frontAppsNameComponentTextfield setEnabled:notWithFrontAppsNamedX];
-        
+
+		// Schedule
+		[scheduleEnabledCheckbox setState:scheduleEnabled];
+		[scheduleTableView setDataSource:(id<NSTableViewDataSource>)self];
+		[scheduleTableView setDelegate:(id<NSTableViewDelegate>)self];
+		[scheduleTableView reloadData];
+
+		// Populate day popup
+		[scheduleDayPopUp removeAllItems];
+		NSArray *dayNames = [NSArray arrayWithObjects:@"Sunday", @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", nil];
+		int i_day;
+		for (i_day = 0; i_day < 7; ++i_day)
+		{
+			[scheduleDayPopUp addItemWithTitle:[dayNames objectAtIndex:i_day]];
+			[[scheduleDayPopUp lastItem] setTag:i_day + 1];
+		}
+		[scheduleDayPopUp selectItemWithTag:2];
+
+		// Populate start time popup (0 to 1425 in 15-min increments)
+		[scheduleStartTimePopUp removeAllItems];
+		int t;
+		for (t = 0; t <= 1425; t += 15)
+		{
+			[scheduleStartTimePopUp addItemWithTitle:[ScheduleEntry timeStringForMinute:t]];
+			[[scheduleStartTimePopUp lastItem] setTag:t];
+		}
+		[scheduleStartTimePopUp selectItemWithTag:540];
+
+		// Populate end time popup (15 to 1440 in 15-min increments)
+		[scheduleEndTimePopUp removeAllItems];
+		for (t = 15; t <= 1440; t += 15)
+		{
+			NSString *title = (t == 1440) ? @"12:00 AM (midnight)" : [ScheduleEntry timeStringForMinute:t];
+			[scheduleEndTimePopUp addItemWithTitle:title];
+			[[scheduleEndTimePopUp lastItem] setTag:t];
+		}
+		[scheduleEndTimePopUp selectItemWithTag:1020];
+
+		// Enable/disable schedule controls
+		[scheduleTableView setEnabled:scheduleEnabled];
+		[scheduleDayPopUp setEnabled:scheduleEnabled];
+		[scheduleStartTimePopUp setEnabled:scheduleEnabled];
+		[scheduleEndTimePopUp setEnabled:scheduleEnabled];
+		[removeScheduleEntryButton setEnabled:(scheduleEnabled && [scheduleTableView selectedRow] >= 0)];
+		[self updateAddButtonState];
+
 		[preferencesWindow centerOnPrimaryScreen];
 		[preferencesWindow setReleasedWhenClosed:NO];
 	}
@@ -359,6 +425,142 @@ static PrefsController *sharedPrefsController = nil;
 	}
 	
 	return frontAppNameComponents;
+}
+
+#pragma mark Schedule
+
+- (BOOL)scheduleEnabled
+{
+	return scheduleEnabled;
+}
+
+- (NSArray *)scheduleEntries
+{
+	return scheduleEntries;
+}
+
+- (BOOL)isCurrentTimeInSchedule
+{
+	return [self currentScheduleEntryIndex] >= 0;
+}
+
+- (NSInteger)currentScheduleEntryIndex
+{
+	if (!scheduleEnabled || [scheduleEntries count] == 0)
+		return -1;
+
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSDateComponents *components = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:[NSDate date]];
+	int currentDay = (int)[components weekday];
+	int currentMinute = (int)[components hour] * 60 + (int)[components minute];
+	int i, c;
+
+	for (i = 0, c = (int)[scheduleEntries count]; i < c; ++i)
+	{
+		ScheduleEntry *entry = [scheduleEntries objectAtIndex:i];
+		if ([entry day] == currentDay && currentMinute >= [entry startMinute] && currentMinute < [entry endMinute])
+			return i;
+	}
+
+	return -1;
+}
+
+- (void)saveScheduleEntries
+{
+	NSMutableArray *dicts = [NSMutableArray arrayWithCapacity:[scheduleEntries count]];
+	int i, c;
+	for (i = 0, c = (int)[scheduleEntries count]; i < c; ++i)
+	{
+		ScheduleEntry *entry = [scheduleEntries objectAtIndex:i];
+		[dicts addObject:[entry dictionaryRepresentation]];
+	}
+	[[NSUserDefaults standardUserDefaults] setObject:dicts forKey:ScheduleEntriesDefaultsKey];
+}
+
+- (void)updateAddButtonState
+{
+	int startMinute = (int)[[scheduleStartTimePopUp selectedItem] tag];
+	int endMinute = (int)[[scheduleEndTimePopUp selectedItem] tag];
+	[addScheduleEntryButton setEnabled:(scheduleEnabled && endMinute > startMinute)];
+}
+
+#pragma mark Schedule Table Data Source
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+	return [scheduleEntries count];
+}
+
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	ScheduleEntry *entry = [scheduleEntries objectAtIndex:row];
+	NSString *identifier = [tableColumn identifier];
+
+	if ([identifier isEqualToString:@"day"])
+		return [entry dayString];
+	else if ([identifier isEqualToString:@"start"])
+		return [entry startTimeString];
+	else if ([identifier isEqualToString:@"end"])
+		return [entry endTimeString];
+
+	return @"";
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)notification
+{
+	[removeScheduleEntryButton setEnabled:(scheduleEnabled && [scheduleTableView selectedRow] >= 0)];
+}
+
+- (IBAction)scheduleEnabledChanged:(id)sender
+{
+	BOOL newState = [sender state];
+
+	if (newState != scheduleEnabled)
+	{
+		scheduleEnabled = newState;
+		[[NSUserDefaults standardUserDefaults] setBool:newState forKey:ScheduleEnabledDefaultsKey];
+
+		[scheduleTableView setEnabled:scheduleEnabled];
+		[scheduleDayPopUp setEnabled:scheduleEnabled];
+		[scheduleStartTimePopUp setEnabled:scheduleEnabled];
+		[scheduleEndTimePopUp setEnabled:scheduleEnabled];
+		[removeScheduleEntryButton setEnabled:(scheduleEnabled && [scheduleTableView selectedRow] >= 0)];
+		[self updateAddButtonState];
+	}
+}
+
+- (IBAction)addScheduleEntry:(id)sender
+{
+	int selectedDay = (int)[[scheduleDayPopUp selectedItem] tag];
+	int selectedStart = (int)[[scheduleStartTimePopUp selectedItem] tag];
+	int selectedEnd = (int)[[scheduleEndTimePopUp selectedItem] tag];
+
+	if (selectedEnd <= selectedStart)
+		return;
+
+	ScheduleEntry *entry = [ScheduleEntry entryWithDay:selectedDay startMinute:selectedStart endMinute:selectedEnd];
+	[scheduleEntries addObject:entry];
+	[scheduleEntries sortUsingSelector:@selector(compare:)];
+	[self saveScheduleEntries];
+	[scheduleTableView reloadData];
+}
+
+- (IBAction)removeScheduleEntry:(id)sender
+{
+	NSInteger selectedRow = [scheduleTableView selectedRow];
+
+	if (selectedRow >= 0 && selectedRow < (NSInteger)[scheduleEntries count])
+	{
+		[scheduleEntries removeObjectAtIndex:selectedRow];
+		[self saveScheduleEntries];
+		[scheduleTableView reloadData];
+		[removeScheduleEntryButton setEnabled:NO];
+	}
+}
+
+- (IBAction)scheduleTimePopUpChanged:(id)sender
+{
+	[self updateAddButtonState];
 }
 
 - (IBAction)jiggleTimeChanged:(id)sender
