@@ -29,6 +29,13 @@
                 <outlet property="onlyWithRemovableWritableDisksCheckbox" destination="684" id="726"/>
                 <outlet property="preferencesWindow" destination="654" id="727"/>
                 <outlet property="showJigglerIconWhenJigglingButton" destination="656" id="728"/>
+                <outlet property="scheduleEnabledCheckbox" destination="9003" id="9100"/>
+                <outlet property="scheduleTableView" destination="9012" id="9101"/>
+                <outlet property="addScheduleEntryButton" destination="9020" id="9102"/>
+                <outlet property="removeScheduleEntryButton" destination="9023" id="9103"/>
+                <outlet property="scheduleDayPopUp" destination="9030" id="9104"/>
+                <outlet property="scheduleStartTimePopUp" destination="9040" id="9105"/>
+                <outlet property="scheduleEndTimePopUp" destination="9050" id="9106"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -39,15 +46,15 @@
         <window title="Jiggler Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="654" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="489" y="501" width="510" height="726"/>
+            <rect key="contentRect" x="489" y="271" width="510" height="956"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="213" height="167"/>
             <view key="contentView" id="655">
-                <rect key="frame" x="0.0" y="0.0" width="510" height="726"/>
+                <rect key="frame" x="0.0" y="0.0" width="510" height="956"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQj-CL-3jJ">
-                        <rect key="frame" x="28" y="396" width="419" height="58"/>
+                        <rect key="frame" x="28" y="626" width="419" height="58"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="419" height="18"/>
@@ -77,12 +84,12 @@
                         </connections>
                     </matrix>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2BB-LS-ihS">
-                        <rect key="frame" x="206" y="95" width="20" height="20"/>
+                        <rect key="frame" x="206" y="325" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="apple" id="MoO-2W-fkd"/>
                     </imageView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JK7-je-yY2">
-                        <rect key="frame" x="40" y="95" width="297" height="18"/>
+                        <rect key="frame" x="40" y="325" width="297" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="The screen is locked by       &gt; Lock Screen" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ihF-hI-6LL">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -93,7 +100,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="690">
-                        <rect key="frame" x="57" y="185" width="396" height="30"/>
+                        <rect key="frame" x="57" y="415" width="396" height="30"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="691">
                             <font key="font" metaFont="label" size="11"/>
@@ -103,7 +110,7 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="656">
-                        <rect key="frame" x="28" y="534" width="379" height="18"/>
+                        <rect key="frame" x="28" y="764" width="379" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Show Jiggler's icon onscreen whenever jiggling is active" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="657">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -114,7 +121,7 @@
                         </connections>
                     </button>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="658">
-                        <rect key="frame" x="182" y="594" width="300" height="25"/>
+                        <rect key="frame" x="182" y="824" width="300" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" continuous="YES" alignment="left" maxValue="5" doubleValue="1" tickMarkPosition="below" numberOfTickMarks="6" sliderType="linear" id="659">
                             <font key="font" metaFont="user"/>
@@ -124,7 +131,7 @@
                         </connections>
                     </slider>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="660">
-                        <rect key="frame" x="27" y="603" width="148" height="17"/>
+                        <rect key="frame" x="27" y="833" width="148" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Time between jiggles:" id="661">
                             <font key="font" metaFont="system"/>
@@ -133,7 +140,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="662">
-                        <rect key="frame" x="168" y="573" width="42" height="13"/>
+                        <rect key="frame" x="168" y="803" width="42" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="5 sec." id="663">
                             <font key="font" metaFont="menu" size="10"/>
@@ -142,7 +149,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="664">
-                        <rect key="frame" x="221" y="573" width="47" height="13"/>
+                        <rect key="frame" x="221" y="803" width="47" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="1 min." id="665">
                             <font key="font" metaFont="menu" size="10"/>
@@ -151,7 +158,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="666">
-                        <rect key="frame" x="279" y="573" width="42" height="13"/>
+                        <rect key="frame" x="279" y="803" width="42" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="5 min." id="667">
                             <font key="font" metaFont="menu" size="10"/>
@@ -160,7 +167,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="668">
-                        <rect key="frame" x="336" y="573" width="46" height="13"/>
+                        <rect key="frame" x="336" y="803" width="46" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="1 hour" id="669">
                             <font key="font" metaFont="menu" size="10"/>
@@ -169,7 +176,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="670">
-                        <rect key="frame" x="386" y="573" width="55" height="13"/>
+                        <rect key="frame" x="386" y="803" width="55" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="5 hours" id="671">
                             <font key="font" metaFont="menu" size="10"/>
@@ -178,7 +185,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="672">
-                        <rect key="frame" x="440" y="573" width="60" height="13"/>
+                        <rect key="frame" x="440" y="803" width="60" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="24 hours" id="673">
                             <font key="font" metaFont="menu" size="10"/>
@@ -187,7 +194,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="674">
-                        <rect key="frame" x="27" y="639" width="456" height="28"/>
+                        <rect key="frame" x="27" y="869" width="456" height="28"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="675">
                             <font key="font" metaFont="label" size="11"/>
@@ -197,7 +204,7 @@
                         </textFieldCell>
                     </textField>
                     <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="676">
-                        <rect key="frame" x="28" y="476" width="454" height="38"/>
+                        <rect key="frame" x="28" y="706" width="454" height="38"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="454" height="18"/>
@@ -223,7 +230,7 @@
                         </connections>
                     </matrix>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="680">
-                        <rect key="frame" x="27" y="352" width="456" height="22"/>
+                        <rect key="frame" x="27" y="582" width="456" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Require at least one of these conditions, if checked below, to jiggle:" id="681">
                             <font key="font" metaFont="system"/>
@@ -232,7 +239,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="705">
-                        <rect key="frame" x="27" y="145" width="456" height="22"/>
+                        <rect key="frame" x="27" y="375" width="456" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="But never jiggle if one of these conditions is met:" id="706">
                             <font key="font" metaFont="system"/>
@@ -241,7 +248,7 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="682">
-                        <rect key="frame" x="40" y="328" width="326" height="18"/>
+                        <rect key="frame" x="40" y="558" width="326" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="The machine is busy working – CPU usage over:" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="683">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -252,7 +259,7 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="684">
-                        <rect key="frame" x="40" y="302" width="439" height="18"/>
+                        <rect key="frame" x="40" y="532" width="439" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="A removable, writable disk is mounted (such as an unburned CD)" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="685">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -263,7 +270,7 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="711">
-                        <rect key="frame" x="40" y="121" width="326" height="18"/>
+                        <rect key="frame" x="40" y="351" width="326" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="The machine is running on battery power only" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="712">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -274,7 +281,7 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="686">
-                        <rect key="frame" x="40" y="250" width="361" height="18"/>
+                        <rect key="frame" x="40" y="480" width="361" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="                                   is running whose name contains:" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="687">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -285,7 +292,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="688">
-                        <rect key="frame" x="60" y="220" width="390" height="22"/>
+                        <rect key="frame" x="60" y="450" width="390" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="689">
                             <font key="font" metaFont="system"/>
@@ -297,7 +304,7 @@
                         </connections>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="692">
-                        <rect key="frame" x="40" y="276" width="390" height="18"/>
+                        <rect key="frame" x="40" y="506" width="390" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="iTunes is currently playing music (not paused or stopped)" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="693">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -308,7 +315,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="694">
-                        <rect key="frame" x="47" y="579" width="117" height="18"/>
+                        <rect key="frame" x="47" y="809" width="117" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="(Set to 20 seconds)" id="695">
                             <font key="font" metaFont="label" size="11"/>
@@ -317,7 +324,7 @@
                         </textFieldCell>
                     </textField>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="696">
-                        <rect key="frame" x="372" y="329" width="63" height="15"/>
+                        <rect key="frame" x="372" y="559" width="63" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="10" maxValue="90" doubleValue="50" tickMarkPosition="below" sliderType="linear" id="697"/>
                         <connections>
@@ -325,7 +332,7 @@
                         </connections>
                     </slider>
                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gSu-Fg-P4O">
-                        <rect key="frame" x="372" y="437" width="63" height="15"/>
+                        <rect key="frame" x="372" y="667" width="63" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="20" tickMarkPosition="below" sliderType="linear" id="QG0-dO-6MW"/>
                         <connections>
@@ -333,7 +340,7 @@
                         </connections>
                     </slider>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="698">
-                        <rect key="frame" x="440" y="327" width="30" height="17"/>
+                        <rect key="frame" x="440" y="557" width="30" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="50%" id="699">
                             <font key="font" metaFont="label" size="11"/>
@@ -342,7 +349,7 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="700">
-                        <rect key="frame" x="58" y="245" width="125" height="26"/>
+                        <rect key="frame" x="58" y="475" width="125" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="An application" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="703" id="701">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -359,7 +366,7 @@
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="707">
-                        <rect key="frame" x="57" y="20" width="396" height="14"/>
+                        <rect key="frame" x="57" y="250" width="396" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="(As above, enter a single item or a comma-separated list)" id="708">
                             <font key="font" metaFont="label" size="11"/>
@@ -368,7 +375,7 @@
                         </textFieldCell>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="713">
-                        <rect key="frame" x="40" y="69" width="397" height="18"/>
+                        <rect key="frame" x="40" y="299" width="397" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="An application is active (frontmost) whose name contains:" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="714">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -379,7 +386,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="709">
-                        <rect key="frame" x="60" y="39" width="390" height="22"/>
+                        <rect key="frame" x="60" y="269" width="390" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="710">
                             <font key="font" metaFont="system"/>
@@ -391,7 +398,7 @@
                         </connections>
                     </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iNl-Uo-XLe">
-                        <rect key="frame" x="28" y="685" width="362" height="18"/>
+                        <rect key="frame" x="28" y="915" width="362" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Launch Jiggler automatically on login (recommended)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5Fd-YH-88y">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -402,7 +409,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aez-qj-q8f">
-                        <rect key="frame" x="429" y="688" width="75" height="32"/>
+                        <rect key="frame" x="429" y="918" width="75" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xnN-ZB-ePE">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -415,7 +422,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="th1-8U-YUK">
-                        <rect key="frame" x="440" y="435" width="30" height="17"/>
+                        <rect key="frame" x="440" y="665" width="30" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="far" id="Zsc-uv-o5V">
                             <font key="font" metaFont="label" size="11"/>
@@ -424,9 +431,160 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZA-aL-SRX">
-                        <rect key="frame" x="327" y="435" width="40" height="17"/>
+                        <rect key="frame" x="327" y="665" width="40" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="nearby" id="MJ8-mO-Bhv">
+                            <font key="font" metaFont="label" size="11"/>
+                            <color key="textColor" white="0.40000001000000002" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9001">
+                        <rect key="frame" x="27" y="198" width="456" height="22"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Schedule:" id="9002">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9003">
+                        <rect key="frame" x="40" y="174" width="430" height="18"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="check" title="Enable Schedule (automatically enable/disable on a weekly schedule)" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="9004">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="scheduleEnabledChanged:" target="-2" id="9005"/>
+                        </connections>
+                    </button>
+                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9010">
+                        <rect key="frame" x="40" y="62" width="420" height="108"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <clipView key="contentView" id="9011">
+                            <rect key="frame" x="1" y="1" width="418" height="106"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsEmptySelection="YES" allowsMultipleSelection="NO" allowsColumnSelection="NO" allowsColumnReordering="NO" allowsColumnResizing="NO" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="YES" autosaveColumns="NO" id="9012">
+                                    <rect key="frame" x="0" y="0" width="418" height="106"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="day" width="130" minWidth="80" maxWidth="200" id="9013">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Day">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="NO" alignment="left" title="Text Cell" id="9014">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="start" width="130" minWidth="80" maxWidth="200" id="9015">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Start">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="NO" alignment="left" title="Text Cell" id="9016">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="end" width="130" minWidth="80" maxWidth="200" id="9017">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="End">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="NO" alignment="left" title="Text Cell" id="9018">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </tableColumn>
+                                    </tableColumns>
+                                </tableView>
+                            </subviews>
+                        </clipView>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9020">
+                        <rect key="frame" x="40" y="36" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="bevel" title="+" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9021">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="addScheduleEntry:" target="-2" id="9022"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9023">
+                        <rect key="frame" x="63" y="36" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <buttonCell key="cell" type="bevel" title="&#x2212;" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9024">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="removeScheduleEntry:" target="-2" id="9025"/>
+                        </connections>
+                    </button>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9030">
+                        <rect key="frame" x="100" y="34" width="110" height="26"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <popUpButtonCell key="cell" type="push" title="Monday" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9031" id="9032">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <menu key="menu" title="OtherViews" id="9033">
+                                <items>
+                                    <menuItem title="Monday" state="on" tag="2" id="9031"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                    </popUpButton>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9040">
+                        <rect key="frame" x="212" y="34" width="100" height="26"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <popUpButtonCell key="cell" type="push" title="9:00 AM" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9041" id="9042">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" title="OtherViews" id="9043">
+                                <items>
+                                    <menuItem title="9:00 AM" state="on" tag="540" id="9041"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="scheduleTimePopUpChanged:" target="-2" id="9044"/>
+                        </connections>
+                    </popUpButton>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9050">
+                        <rect key="frame" x="314" y="34" width="100" height="26"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <popUpButtonCell key="cell" type="push" title="5:00 PM" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9051" id="9052">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" title="OtherViews" id="9053">
+                                <items>
+                                    <menuItem title="5:00 PM" state="on" tag="1020" id="9051"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="scheduleTimePopUpChanged:" target="-2" id="9054"/>
+                        </connections>
+                    </popUpButton>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9070">
+                        <rect key="frame" x="57" y="10" width="396" height="22"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Use + to add time ranges. Days with no entries stay off." id="9071">
                             <font key="font" metaFont="label" size="11"/>
                             <color key="textColor" white="0.40000001000000002" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

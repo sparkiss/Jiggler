@@ -27,6 +27,7 @@
 		987BCA49247F74B80069B2FC /* VersionCheck.strings in Resources */ = {isa = PBXBuildFile; fileRef = 987BCA47247F74B80069B2FC /* VersionCheck.strings */; };
 		987BCA4C247F75360069B2FC /* Base.strings in Resources */ = {isa = PBXBuildFile; fileRef = 987BCA4A247F75360069B2FC /* Base.strings */; };
 		987BCA4E248030420069B2FC /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 987BCA4D248030420069B2FC /* apple.png */; };
+		A1B2C3D4E5F6A7B80001AAAA /* ScheduleEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B80002AAAA /* ScheduleEntry.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,8 @@
 		987BCA48247F74B80069B2FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/VersionCheck.strings; sourceTree = "<group>"; };
 		987BCA4B247F75360069B2FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Base.strings; sourceTree = "<group>"; };
 		987BCA4D248030420069B2FC /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B80003AAAA /* ScheduleEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScheduleEntry.h; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B80002AAAA /* ScheduleEntry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScheduleEntry.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				987BCA23247F5CAE0069B2FC /* PrefsController.m */,
 				987BCA22247F5CAE0069B2FC /* TimedQuitController.h */,
 				987BCA21247F5CAE0069B2FC /* TimedQuitController.m */,
+				A1B2C3D4E5F6A7B80003AAAA /* ScheduleEntry.h */,
+				A1B2C3D4E5F6A7B80002AAAA /* ScheduleEntry.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -258,6 +263,7 @@
 				987BCA34247F5CD30069B2FC /* SSPanels.m in Sources */,
 				987BCA03247F5AD80069B2FC /* AppDelegate.m in Sources */,
 				987BCA33247F5CD30069B2FC /* SSProgressPanel.m in Sources */,
+				A1B2C3D4E5F6A7B80001AAAA /* ScheduleEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
