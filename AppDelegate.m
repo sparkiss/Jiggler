@@ -81,7 +81,9 @@ extern OSErr UpdateSystemActivity(UInt8 activity) __attribute__((weak_import));
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-	
+
+	lastScheduleEntryIndex = -1;
+
 	//[self checkJiggleTime];
 	
 	// We check with a repeating timer, to avoid issues with rescheduling and such.
@@ -566,6 +568,46 @@ extern OSErr UpdateSystemActivity(UInt8 activity) __attribute__((weak_import));
 	return NO;
 }
 
+- (void)evaluateSchedule
+{
+	PrefsController *prefs = [PrefsController sharedPrefsController];
+
+	if (![prefs scheduleEnabled])
+		return;
+
+	NSInteger currentEntryIndex = [prefs currentScheduleEntryIndex];
+	BOOL inSchedule = (currentEntryIndex >= 0);
+
+	// Detect schedule boundary transitions: entering, exiting, or switching between ranges.
+	// Clear the manual override on any boundary change so that back-to-back ranges re-enable
+	// the switch even if the user overrode during the previous range.
+	if (currentEntryIndex != lastScheduleEntryIndex)
+	{
+		scheduleManuallyOverridden = NO;
+		lastScheduleEntryIndex = currentEntryIndex;
+	}
+
+	if (inSchedule)
+	{
+		if (!scheduleManuallyOverridden && !jiggleMasterSwitch)
+		{
+			jiggleMasterSwitch = YES;
+			[[NSUserDefaults standardUserDefaults] setBool:YES forKey:JiggleMasterSwitchDefaultsKey];
+			[self fixMasterSwitchUI];
+		}
+	}
+	else
+	{
+		if (jiggleMasterSwitch)
+		{
+			jiggleMasterSwitch = NO;
+			[[NSUserDefaults standardUserDefaults] setBool:NO forKey:JiggleMasterSwitchDefaultsKey];
+			[self fixMasterSwitchUI];
+			[self setJigglingActive:NO];
+		}
+	}
+}
+
 - (void)periodicJiggleStatusCheck:(id)unused
 {
 	static unsigned int callout_counter = 0;
@@ -585,7 +627,11 @@ extern OSErr UpdateSystemActivity(UInt8 activity) __attribute__((weak_import));
 	// Keep track of callouts, so we can skip operations on some callouts for lower CPU usage
 	// Each callout is 0.25 seconds, so ((callout_counter & 0x0F) == 0) gives you every 4.0 seconds...
 	callout_counter++;
-	
+
+	// Evaluate schedule every ~4 seconds (before inhibitor checks so state changes are visible)
+	if ((callout_counter & 0x0F) == 0)
+		[self evaluateSchedule];
+
 	// Check for conditions under which jiggling is forbidden; if any are true, turn off jiggling immediately
 	// and return.  There are no cases under which jiggling occurs, or stays on when active, with these conditions.
 	if ((notOnBattery && RunningOnBatteryOnly()) ||
@@ -875,7 +921,12 @@ extern OSErr UpdateSystemActivity(UInt8 activity) __attribute__((weak_import));
 - (IBAction)jiggleMasterSwitchChanged:(id)sender
 {
 	jiggleMasterSwitch = !jiggleMasterSwitch;
-	
+
+	// If schedule is active and user manually toggles, set override flag
+	PrefsController *prefs = [PrefsController sharedPrefsController];
+	if ([prefs scheduleEnabled] && [prefs isCurrentTimeInSchedule])
+		scheduleManuallyOverridden = YES;
+
 	if (!jiggleMasterSwitch)
 		[self cancelTimedQuit:nil];
 	

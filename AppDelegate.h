@@ -32,6 +32,10 @@
 	// Spying on iTunes
 	BOOL iTunesIsPlaying;
 	BOOL jiggleConditionsLikelyToHaveChanged;
+
+	// Schedule
+	BOOL scheduleManuallyOverridden;
+	NSInteger lastScheduleEntryIndex;  // index of the previously active schedule entry, or -1
 	
 	// Status bar icon variants
 	NSImage *scaledJigglerImage;
