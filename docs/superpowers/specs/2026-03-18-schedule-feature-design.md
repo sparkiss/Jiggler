@@ -32,17 +32,25 @@ Example: Monday 9:00 AM - 12:00 PM = `{ day: 2, startMinute: 540, endMinute: 720
 
 Overlapping entries on the same day are allowed (both count as active).
 
+**Validation:** `endMinute` must be > `startMinute`. The Add button is disabled when end <= start. Ranges cannot span midnight; use two entries on consecutive days if needed (e.g., 11:45 PM-12:00 AM on day 1 and 12:00 AM-12:30 AM on day 2).
+
+**Start time popup:** 96 options (12:00 AM through 11:45 PM, i.e., 0-1425). **End time popup:** 96 options (12:15 AM through 12:00 AM next day, i.e., 15-1440).
+
+**Empty schedule:** If schedule is enabled but has no entries, the master switch will be turned OFF by the next schedule evaluation (~4 seconds).
+
 ## Architecture
 
 ### New Class: ScheduleEntry
 
-Simple model object. No XIB.
+Simple model object. No XIB. Uses manual retain/release (no ARC), consistent with the rest of the codebase. Uses bare ivars (not @property), matching the existing AppDelegate/PrefsController style.
 
 ```objc
 @interface ScheduleEntry : NSObject
-@property (nonatomic) int day;          // 1-7 (NSCalendar weekday)
-@property (nonatomic) int startMinute;  // 0-1425
-@property (nonatomic) int endMinute;    // 15-1440
+{
+    int day;           // 1-7 (NSCalendar weekday)
+    int startMinute;   // 0-1425
+    int endMinute;     // 15-1440
+}
 
 - (NSDictionary *)dictionaryRepresentation;
 + (instancetype)entryWithDictionary:(NSDictionary *)dict;
@@ -81,7 +89,7 @@ New ivar:
 - `BOOL scheduleManuallyOverridden` -- set when user manually toggles master switch during active schedule
 
 New method:
-- `- (void)evaluateSchedule` -- called from `periodicJiggleStatusCheck:` every ~4 seconds (using existing `callout_counter & 0x0F` pattern)
+- `- (void)evaluateSchedule` -- called at the **top** of `periodicJiggleStatusCheck:`, before the inhibitor checks, every ~4 seconds (using existing `callout_counter & 0x0F` pattern). This ensures schedule-driven master switch changes are visible to the rest of the function within the same callout. Schedule boundaries are enforced within ~4 seconds, not exactly on the minute.
 
 #### evaluateSchedule Logic
 
@@ -119,8 +127,21 @@ New section below existing controls:
 
 - **App launch**: Schedule evaluates fresh. If current time is within a range, master switch turns ON. No override flag persists across launches.
 - **Manual override**: Sticks until current range ends or next range begins (any boundary transition clears it).
-- **Multiple ranges same day**: Each range is independent. Override clears when exiting the current range, even if another range is about to start.
+- **Multiple ranges same day**: Each range is independent. Override clears when exiting the current range, even if another range is about to start. When transitioning directly from one range into another (back-to-back entries), the override is cleared and the switch is re-enabled.
 - **Schedule disabled**: Master switch stays in whatever state it's in. User has full manual control.
+
+## Memory Management
+
+All new code follows manual retain/release (no ARC), consistent with the rest of the codebase.
+
+- `ScheduleEntry` implements `dealloc` (trivial -- no object ivars to release).
+- `PrefsController`: `scheduleEntries` is `[[NSMutableArray alloc] init]` in `init`, released in `dealloc`. Individual `ScheduleEntry` objects are retained by the array.
+- `dictionaryRepresentation` returns an autoreleased `NSDictionary`. `entryWithDictionary:` returns an autoreleased `ScheduleEntry`.
+- New ivars in both `PrefsController` and `AppDelegate` go in the existing `@interface` ivar blocks, matching the current codebase style.
+
+## Localization
+
+Localization of the schedule UI labels is out of scope for the initial implementation. Strings will be hardcoded in English, consistent with how some existing UI elements are handled.
 
 ## Files Modified
 
