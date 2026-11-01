@@ -215,3 +215,6 @@ xcshareddata
 # This keeps a built executable of slim, or a bin directory, from getting added
 slim
 bin
+
+# Brainstorm session output
+.superpowers/
